@@ -1,9 +1,7 @@
 library(ggplot2)
-library(shiny)
-library(shinydashboard)
 library(dplyr)
 
-path_data = "/home/leaveit/Documents/Data_Sci_Dashboard/data"
+path_data = "/home/leaveit/Documents/Dashboard_data_sci/data"
 if (getwd() != path_data){
   setwd(path_data)
 }
@@ -44,12 +42,12 @@ country.proportion.gender = function(country){
 }
 
 # Bar Plot of number of customers in a region.
-num.customers.region <- customer %>% count(customer.region)
-x = 1:16
+num.customers.region <- data.frame(table(customer.region))
+x = 1:14
 x = as.numeric(x)
 num.customers <- function(){
-  barplot(num.customers.region$n ~ x, 
-          ylim = c(0, max(num.customers.region$n)+1),
+  barplot(num.customers.region$Freq ~ x, 
+          ylim = c(0, max(num.customers.region$Freq)+1),
           xlab="Regions",
           ylab="Number of customers",
           main = "Histogram of number of customers in a region",

@@ -1,11 +1,9 @@
 library(ggplot2)
-library(shiny)
-library(shinydashboard)
 library(dplyr)
 
-path_data = "/home/leaveit/Documents/Data_Sci_Dashboard/data"
+path_data = "/home/leaveit/Documents/Dashboard_data_sci/data"
 if (getwd() != path_data){
-  setwd("/home/leaveit/Documents/Data_Sci_Dashboard/data")
+  setwd("/home/leaveit/Documents/Dashboard_data_sci/data")
 }
 
 order = read.csv("order_details.csv")

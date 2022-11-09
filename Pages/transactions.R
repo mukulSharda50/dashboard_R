@@ -1,3 +1,4 @@
+# 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 github
 library(ggplot2)
 library(dplyr)
 
@@ -10,10 +11,12 @@ transaction = read.csv("transaction_details.csv")
 product = read.csv("product_details.csv")
 order = read.csv("order_details.csv")
 customer = read.csv("customer_details.csv")
+ship = read.csv("shipping_details.csv")
 
 # profit distribution
-hist(transaction$profit)
-
+profit.dist = function(){
+  hist(transaction$profit)
+}
 # total profit and total sale
 total.profit = sum(transaction$profit)
 prod.trans = transaction %>%
@@ -59,8 +62,10 @@ profit.ship.cost = transaction %>%
   inner_join(ship) %>%
     select(profit, qty.purchased, ship.cost) %>%
       arrange(desc(ship.cost))
-cor(profit.ship.cost)
 
+# plot(profit.ship.cost$profit~profit.ship.cost$qty.purchased) #is this correct?
+plot(profit.ship.cost$profit, profit.ship.cost$ship.cost,
+     xlab="Profit", ylab="Shipping Cost", main="Relationship between profit and shipping cost")
 
 # affect of discount on qty purchased or profit
 discount = product$product.discount
@@ -68,18 +73,17 @@ qty = transaction$qty.purchased
 prof = transaction$profit 
 
 cor(discount, qty)
-cor(discount, profit)
+cor(discount, prof)
 
-# which product is bought max in which region
+# which product is bought max in which country
 data = transaction %>%
-  inner_join(customer, by="customer.id") %>%
-  inner_join(product, by="product.id") %>%
-  select(product.category, product.name, qty.purchased, customer.state, 
-         customer.country, customer.region) %>%
-  filter(qty.purchased == max(qty.purchased) & customer.country == "India")
+  inner_join(customer) %>%
+  inner_join(product) %>%
+  select(product.name, product.category, qty.purchased, customer.country) %>%
+  group_by(customer.country) %>%
+  summarise(max=max(qty.purchased))
 
-
-
+View(data)
 
 
 
