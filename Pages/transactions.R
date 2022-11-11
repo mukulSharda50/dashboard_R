@@ -1,6 +1,6 @@
-# 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 github
 library(ggplot2)
 library(dplyr)
+library(DT)
 
 path_data = "/home/leaveit/Documents/Dashboard_data_sci/data"
 if (getwd() != path_data){
@@ -13,9 +13,24 @@ order = read.csv("order_details.csv")
 customer = read.csv("customer_details.csv")
 ship = read.csv("shipping_details.csv")
 
+# print transaction data
+trans.data.table = function(){
+  datatable(head(transaction, 1000))
+}
+# summary 
+trans.summ = summary(transaction)
+
 # profit distribution
-profit.dist = function(){
+profit.plots = function(){
+  q1 = transaction %>% 
+    inner_join(order) %>%
+    select(profit, order.month) %>%
+    group_by(order.month) %>%
+    summarise(sum=sum(profit))
+  par(mfrow=c(1, 2), mar = c(5, 4, 4, 2) + 0.1)
   hist(transaction$profit)
+  plot(q1$sum, main="Profit per month",type="l",
+       xlab = "Months", ylab = "Profit")
 }
 # total profit and total sale
 total.profit = sum(transaction$profit)
@@ -46,14 +61,7 @@ maxprofit.category = unique(prod.profit[prod.profit$profit == max(prod.profit$pr
 
 # profit per month
 profit.month = function(){
-  q1 = transaction %>% 
-    inner_join(order) %>%
-      select(profit, order.month) %>%
-        group_by(order.month) %>%
-          summarise(sum=sum(profit))
   
-  plot(q1$sum, main="Profit per month",type="l",
-       xlab = "Months", ylab = "Profit")
 }
 
 
@@ -82,8 +90,6 @@ data = transaction %>%
   select(product.name, product.category, qty.purchased, customer.country) %>%
   group_by(customer.country) %>%
   summarise(max=max(qty.purchased))
-
-View(data)
 
 
 

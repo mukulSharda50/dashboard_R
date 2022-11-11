@@ -9,6 +9,10 @@ if (getwd() != path_data){
 order = read.csv("order_details.csv")
 attach(order)
 
+order.data.table = function(){
+  datatable(head(order, 1000))
+}
+
 priority = unique(order.priority)
 
 order.Months <- function(){

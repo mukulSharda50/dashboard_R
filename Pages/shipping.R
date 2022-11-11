@@ -9,6 +9,11 @@ if (getwd() != path_data){
 ship = read.csv("shipping_details.csv")
 attach(ship)
 
+# table
+ship.data.table = function(){
+  datatable(head(ship, 1000))
+}
+
 # Histogram of Shipping cost, showing distribution of the cost
 ship.cost.dist = function(){
   cost = as.numeric(ship.cost)

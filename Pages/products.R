@@ -9,6 +9,10 @@ if (getwd() != path_data){
 product = read.csv("product_details.csv")
 attach(product)
 
+product.data.table = function(){
+  datatable(head(product, 1000))
+}
+
 prod.category.List = unique(product.category)
 prod.List = unique(product.name)
 
