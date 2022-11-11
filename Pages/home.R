@@ -28,19 +28,32 @@ sidebar <- dashboardSidebar(
 
 body <- dashboardBody(
   tabItems(
-    tabItem("transaction", 
-      box(plotOutput("profit.dist")),
-      box(plotOutput("profit.month"))
+    tabItem("transaction",
+      tabsetPanel(type = "tabs",
+          tabPanel("Summary", verbatimTextOutput("trans.summary")),
+          tabPanel("Plots", plotOutput("profit.plot")),
+          tabPanel("Table", dataTableOutput("transaction.table"))
+      ),
     ),
-    tabItem("shipping", 
-      box(plotOutput("ship.cost.dist"))
+    tabItem("shipping",
+      tabsetPanel(type = "tabs",
+          tabPanel("Summary", verbatimTextOutput("ship.summary")),
+          tabPanel("Plots", plotOutput("ship.cost.dist")),
+          tabPanel("Table", dataTableOutput("ship.table"))
+      ),
     ),
     tabItem("orders",
-      box(plotOutput("order.count"))      
+      tabsetPanel(type = "tabs",
+          tabPanel("Summary", verbatimTextOutput("orders.summary")),
+          tabPanel("Plots", plotOutput("order.count")),
+          tabPanel("Table", dataTableOutput("order.table"))
+      ),
     ),
-    tabItem("products", 
-      h1("Products"),
-      h2("products")
+    tabItem("products",
+      tabsetPanel(type = "tabs",
+          tabPanel("Summary", verbatimTextOutput("prod.summary")),
+          tabPanel("Table", dataTableOutput("product.table"))
+      )
     ),
     tabItem("customers",
       h1("Customers"),
@@ -67,8 +80,15 @@ server <- function(input, output){
   output$num.customers = renderPlot(num.customers())
   output$order.count = renderPlot(order.Months())
   output$ship.cost.dist = renderPlot(ship.cost.dist())
-  output$profit.dist = renderPlot(profit.dist())
-  output$profit.month = renderPlot(profit.month())
+  output$profit.plot = renderPlot(profit.plots())
+  output$transaction.table = renderDataTable(trans.data.table())
+  output$product.table = renderDataTable(product.data.table())
+  output$order.table = renderDataTable(order.data.table())
+  output$ship.table = renderDataTable(ship.data.table())
+  output$trans.summary = renderPrint(trans.summ)
+  output$prod.summary = renderPrint(trans.summ)
+  output$order.summary = renderPrint(trans.summ)
+  output$ship.summary = renderPrint(trans.summ)
 }
   
 
