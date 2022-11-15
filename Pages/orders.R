@@ -1,5 +1,6 @@
 library(ggplot2)
 library(dplyr)
+library(plotly)
 
 path_data = "/home/leaveit/Documents/Dashboard_data_sci/data"
 if (getwd() != path_data){
@@ -24,11 +25,10 @@ count = table(months)
   abline(h = max(count))
 }
 
-
-# total sales
-
-
-
+priority = function(){
+  p = order[order.priority != "", ]$order.priority
+  plot_ly(order, x=p)
+}
 
 
 

@@ -23,11 +23,22 @@ customer.region = gsub("4orth", "North", customer.region)
 customer.region = gsub("So3th", "South", customer.region)
 count.region = table(customer.region)
 
+cust.len = length(unique(customer.id))
+cust.country = length(unique(customer.country))
+
+cust.city = length(unique(customer.city))
+
+
+customer.data.table = function(){
+  datatable(head(customer, 1000))
+}
+cust.summ = summary(customer)
+country = unique(customer.country)
 
 # Visualization functions
 # Pie chart of gender proportion in all regions.
 data = as.data.frame(table(customer.gender))
-total.proportion.gender <-ggplot(data, aes(x="", y="", fill=customer.gender)) +
+proportion.gender <-ggplot(data, aes(x="", y="", fill=customer.gender)) +
                         geom_bar(stat="identity", width=1, color="white") +
                         coord_polar("y", start=0) +
                         theme_void() 
@@ -55,6 +66,18 @@ num.customers <- function(){
           names.arg = num.customers.region$customer.region
   )
 }
+highest.country.cust = data.frame(table(customer.country))
+n = highest.country.cust$Freq
+#plot(n)
+#mean(n)
+#median(n)
+#sd(n)
+#boxplot(n)
+#hist(n)
+
+
+
+
 
 
 

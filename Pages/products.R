@@ -13,26 +13,20 @@ product.data.table = function(){
   datatable(head(product, 1000))
 }
 
+unique.categ = length(unique(product.category))
+unique.prod = length(unique(product.name))
+
 prod.category.List = unique(product.category)
 prod.List = unique(product.name)
 
-data = prod %>% select(product.name, product.price, product.discount) %>%
+data = product %>% select(product.name, product.price, product.discount) %>%
   group_by(product.name)
 
 
 d = unique(data)
 
-
-# least expensive, most expensive
-# highest discount
-# products offered in different categories
-
-
-
-
-
-
-
-
-
-
+table(product.category)
+total.product.count = product %>% count(product.name)
+barplot(total.product.count$n,
+        horiz = TRUE,
+        names.arg = total.product.count$product.name)

@@ -17,8 +17,8 @@ ship.data.table = function(){
 # Histogram of Shipping cost, showing distribution of the cost
 ship.cost.dist = function(){
   cost = as.numeric(ship.cost)
-  hist(cost, main="Distribution of shipping cost", col="maroon")
+  plot(density(cost), main="Distribution of shipping cost", col="maroon")
 }
 
 shipMode = unique(ship.mode)
-shipMode
+tapply(ship$ship.cost, ship$ship.mode, median)

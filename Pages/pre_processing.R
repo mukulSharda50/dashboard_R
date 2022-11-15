@@ -38,11 +38,11 @@ unique(product$product.category)
 unique(product$product.name)
 
 product$product.price = as.numeric(substring(product$product.price, 2))
-product[is.na(product$product.price), ] = median(product$product.price, na.rm=T)
+product[is.na(product$product.price), ]$product.price = median(product$product.price, na.rm=T)
 
 unique(product$product.discount)
 product$product.discount = as.numeric(product$product.discount)
-product[is.na(product$product.discount), ] = median(product$product.discount, na.rm = T) 
+product[is.na(product$product.discount), ]$product.discount = median(product$product.discount, na.rm = T) 
 head(product)
 write.csv(product, "product_details.csv")
 rm(product)
