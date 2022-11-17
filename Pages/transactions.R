@@ -205,9 +205,16 @@ qty.category = function(country){
 }
 
 
+prod = unique(product$product.name)
 
-
-
+prod.chart = function(prod.name){
+  t = transaction %>% inner_join(product) %>% inner_join(customer)
+  q = t %>% select(customer.country, product.name, quantity.purchased) %>% 
+    group_by(product.name, customer.country) %>% summarise(sum=sum(quantity.purchased))
+  t1 = q[q$product.name == prod.name, ]
+  plot_ly(t1, x=~customer.country, y=~sum, type="bar", color=I("maroon")) %>%
+    layout(title=list(text=paste("Top markets for ", prod.name), y=0.95))
+}
 
 
 

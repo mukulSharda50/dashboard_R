@@ -90,12 +90,20 @@ body <- dashboardBody(
         column(
           4, 
           h3("Trending products in a country"),
-          selectInput("country", "Choose Country:", country),       
+          selectInput("countries", "Choose Country:", country),       
         ),
         column(
           8,
           h3("Output:"),
           dataTableOutput("trending")
+        )
+      ),
+      br(),
+      fluidRow(
+        column(12,
+          h3("Top market countries for products offered:"),
+          column(2, selectInput("products", "Select a product:", prod)),
+          column(10, plotlyOutput("prodchart", height=600))
         )
       ),
       br(),
@@ -140,13 +148,14 @@ server <- function(input, output){
   output$plot4 = renderPlot(plot3())
   output$ship.qty.corr = renderPlot(ship.qty())
   output$country.prod = renderPlotly(total.prod.country())
-  output$trending = renderDataTable(trend.country(input$country))
+  output$trending = renderDataTable(trend.country(input$countries))
   output$avg.waiting.time = renderPlotly(avg.wait())
   output$order.prior = renderPlotly(priority())
   output$sales.mon = renderPlotly(sales())
   output$cost = renderPlotly(shipcost())
   output$profit.category = renderPlotly(profit.per.category())
   output$share.qty.prod = renderPlotly(qty.category(input$country))
+  output$prodchart = renderPlotly(prod.chart(input$products))
 }
 
 shinyApp(ui, server)
