@@ -1,7 +1,4 @@
-library(ggplot2)
 library(dplyr)
-library(plotly)
-library(DT)
 
 path_data = "/home/leaveit/Documents/Dashboard_data_sci/data"
 if (getwd() != path_data){
@@ -33,9 +30,6 @@ prof.month.line = function(){
     select(profit, order.month) %>%
     group_by(order.month) %>%
     summarise(sum=sum(profit))
-  
-  #fig <- plot_ly(x=profit.month$order.month, y=profit.month$sum, name="profit", type="scatter", mode="lines")
-  #fig <- fig %>% add_trace(y=d$sum, name="sales",line = list(color = 'rgb(22, 96, 167)', width = 4))
  
   
   plot_ly(profit.month, x = profit.month$order.month, 
@@ -147,10 +141,25 @@ trend.country = function(country){
   data = merge(data, p)
   
   trend = data %>% select(quantity.purchased, product.name, product.category, customer.country) %>%
-    group_by(customer.country) %>%
-    filter(customer.country == country & quantity.purchased == max(quantity.purchased))
+    group_by(customer.country) %>% arrange(desc(quantity.purchased)) %>%
+    filter(customer.country == country)
  
-  datatable(data.frame(unique(trend)))
+  datatable(data.frame(head(unique(trend), 15)))
+  #plot_ly(trend, labels=~product.name, values=~quantity.purchased, type="pie")
+  #plot_ly(trend, x=~product.name, y=~quantity.purchased, type="bar")
+}
+trend.country.prods = function(country){
+  t = transaction[, -c(1, 2)]
+  c = customer[, -c(1, 2)]
+  p = product[, -c(1, 2)]
+  data = merge(t, c)
+  data = merge(data, p)
+  
+  trend = data %>% select(quantity.purchased, product.name, product.category, customer.country) %>%
+    group_by(customer.country) %>% arrange(desc(quantity.purchased)) %>%
+    filter(customer.country == country)
+  plot_ly(trend, x=~product.name, y=~quantity.purchased, type="bar") %>%
+    layout(xaxis=list(title=paste("Showing for ", country)), yaxis=list(title="number of products"))
 }
 
 avg.wait = function(){
@@ -213,7 +222,12 @@ prod.chart = function(prod.name){
     group_by(product.name, customer.country) %>% summarise(sum=sum(quantity.purchased))
   t1 = q[q$product.name == prod.name, ]
   plot_ly(t1, x=~customer.country, y=~sum, type="bar", color=I("maroon")) %>%
-    layout(title=list(text=paste("Top markets for ", prod.name), y=0.95))
+    layout(title=list(text=paste("Top markets for ", prod.name), y=0.95), yaxis=list(title="Number of products bought"))
+}
+
+prod = function(){
+  t = transaction %>% inner_join(customer, by="customer.id") %>% 
+    inner_join(product, by="product.id") 
 }
 
 
